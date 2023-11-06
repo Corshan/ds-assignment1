@@ -1,16 +1,23 @@
 import * as cdk from 'aws-cdk-lib';
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { SeedData } from './seed-data';
+import { reviews } from '../seed/reviews';
+
 
 export class RestApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const reviewsTable  = new dynamodb.Table(this, "ReviewsTable", {
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      partitionKey: {name: "movieId", type: dynamodb.AttributeType.NUMBER},
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "Reviews"
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'DsAssignment1Queue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    new SeedData(this, "SeedData", {reviewsTable, reviews});
+    
   }
 }
