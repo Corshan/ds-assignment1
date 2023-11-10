@@ -1,7 +1,7 @@
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand, QueryCommandInput, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, QueryCommandInput, QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { createDDbDocClient } from "../shared/utils";
 
 const ddbDocClient = createDDbDocClient();
@@ -10,6 +10,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     try {
     const parameters = event.pathParameters;
 
+    const queryParams = event.queryStringParameters;
     const movieId = parameters?.movieId ? parseInt(parameters.movieId) : undefined;
 
     if (!movieId) {
@@ -22,16 +23,21 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
         };
     }
 
+    const minRating = (queryParams?.minRating) ? parseInt(queryParams?.minRating) : undefined;
+
     const command: QueryCommandInput = {
         TableName: process.env.TABLE_NAME,
-        KeyConditionExpression: "movieId = :m",
-        ExpressionAttributeValues: {
+        FilterExpression: (minRating) ? "movieId = :m and rating >= :r" : "movieId = :m",
+        ExpressionAttributeValues: (minRating) ?{
+            ":m": movieId,
+            ":r": minRating
+        } : {
             ":m": movieId,
         },
     }
 
     const ouput = await ddbDocClient.send(
-        new QueryCommand(command)
+        new ScanCommand(command)
     );
 
     const body = {
