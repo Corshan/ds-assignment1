@@ -14,8 +14,14 @@ export class RestApiStack extends cdk.Stack {
     const reviewsTable = new dynamodb.Table(this, "ReviewsTable", {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: "movieId", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "reviewerName", type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "Reviews"
+    });
+
+    reviewsTable.addLocalSecondaryIndex({
+      indexName: "date",
+      sortKey: {name: "reviewDate", type: dynamodb.AttributeType.STRING}
     });
 
     new SeedData(this, "SeedData", { reviewsTable, reviews });

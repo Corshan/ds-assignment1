@@ -40,19 +40,36 @@ export class RestApi extends Construct {
             fileName: "addReview.ts",
             table: table,
             permissons: Permissons.WRITE
-        })
+        });
+
+        const getReviewsByIdFn = new LambdaFn(this, "getReviewsByIdFn", {
+            functionName: "getReviewsById",
+            fileName: "getReviewsById.ts",
+            table: table,
+            permissons: Permissons.READ
+        });
 
         const moviesEndpoint = api.root.addResource("movies");
+        const movieEndpoint = moviesEndpoint.addResource("{movieId}");
+        const movieReviewsEndpoint = movieEndpoint.addResource("reviews");
         const reviewsEndpoint = moviesEndpoint.addResource("reviews");
 
+        // GET /movies/reviews
         reviewsEndpoint.addMethod(
             "GET",
             new apig.LambdaIntegration(getReviewsFn.lambdaFunction, { proxy: true })
         );
 
+        // POST /movies/reviews
         reviewsEndpoint.addMethod(
             "POST",
-            new apig.LambdaIntegration(addReviewFn.lambdaFunction, {proxy: true})
+            new apig.LambdaIntegration(addReviewFn.lambdaFunction, { proxy: true })
+        );
+
+        // GET /movies/{movieId}/reviews
+        movieReviewsEndpoint.addMethod(
+            "GET",
+            new apig.LambdaIntegration(getReviewsByIdFn.lambdaFunction, { proxy: true })
         );
     }
 }
