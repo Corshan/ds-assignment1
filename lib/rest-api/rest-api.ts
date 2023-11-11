@@ -60,6 +60,17 @@ export class RestApi extends Construct {
             }
         );
 
+        const updateReviewContentFn = new LambdaFn(
+            this,
+            "updateReviewContentFn",
+            {
+                functionName: "updateReviewContent",
+                fileName: "updateReviewContent.ts",
+                table,
+                permissons: Permissons.READ_WRITE
+            }
+        );
+
         // URL /movies
         const moviesEndpoint = api.root.addResource("movies");
 
@@ -73,7 +84,10 @@ export class RestApi extends Construct {
         const movieReviewsEndpoint = movieEndpoint.addResource("reviews");
 
         // URL /movies/{movieId}/reviews/{reviewerName}
-        const reviewerNameEndpoint = movieReviewsEndpoint.addResource("{reviewerName}")
+        const reviewerNameEndpoint = movieReviewsEndpoint.addResource("{reviewerName}");
+
+        // URL /movies/{movieId}/reviews/{year}
+        const reviewYear = movieReviewsEndpoint.addResource("{year}");
 
 
         // GET /movies/reviews
@@ -98,6 +112,12 @@ export class RestApi extends Construct {
         reviewerNameEndpoint.addMethod(
             "GET",
             new apig.LambdaIntegration(getReviewsByReviewerNameFn.lambdaFunction, { proxy: true })
+        );
+
+        // PUT /movies/{movieId}/reviews/{reviewerName}
+        reviewerNameEndpoint.addMethod(
+            "PUT",
+            new apig.LambdaIntegration(updateReviewContentFn.lambdaFunction, { proxy: true })
         );
     }
 }

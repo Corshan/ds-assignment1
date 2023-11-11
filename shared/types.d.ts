@@ -5,3 +5,7 @@ export type Review = {
     content: string,
     rating: number
 }
+
+export type UpdateReview = {
+    content: string
+}

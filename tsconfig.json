@@ -19,6 +19,8 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "strictPropertyInitialization": false,
     "typeRoots": [
       "./node_modules/@types"

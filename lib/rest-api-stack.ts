@@ -2,9 +2,9 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from 'constructs';
-import { SeedData } from './constructs/seed-data';
+import { SeedData } from './rest-api/seed-data';
 import { reviews } from '../seed/reviews';
-import { RestApi } from './constructs/rest-api';
+import { RestApi } from './rest-api/rest-api';
 
 
 export class RestApiStack extends cdk.Stack {
