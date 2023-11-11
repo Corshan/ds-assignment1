@@ -1,9 +1,9 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { Review } from "../shared/types";
+import { Review } from "../../shared/types";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
-import { generateBatch } from "../shared/utils"
+import { generateBatch } from "../../shared/utils"
 
 type SeedDataProps = {
     reviewsTable: Table,
