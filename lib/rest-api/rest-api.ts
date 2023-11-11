@@ -71,6 +71,17 @@ export class RestApi extends Construct {
             }
         );
 
+        const getReviewsByYearFn = new LambdaFn(
+            this,
+            "getReviewsByYearFn",
+            {
+                functionName: "getReviewsByYear",
+                fileName: "getReviewsByYear.ts",
+                table,
+                permissons: Permissons.READ
+            }
+        );
+
         // URL /movies
         const moviesEndpoint = api.root.addResource("movies");
 
@@ -85,10 +96,6 @@ export class RestApi extends Construct {
 
         // URL /movies/{movieId}/reviews/{reviewerName}
         const reviewerNameEndpoint = movieReviewsEndpoint.addResource("{reviewerName}");
-
-        // URL /movies/{movieId}/reviews/{year}
-        const reviewYear = movieReviewsEndpoint.addResource("{year}");
-
 
         // GET /movies/reviews
         reviewsEndpoint.addMethod(
