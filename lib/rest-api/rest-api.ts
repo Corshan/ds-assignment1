@@ -71,12 +71,12 @@ export class RestApi extends Construct {
             }
         );
 
-        const getReviewsByYearFn = new LambdaFn(
+        const getAllReviewsByReviewerNameFn = new LambdaFn(
             this,
-            "getReviewsByYearFn",
+            "getAllReviewsByReviewerNameFn",
             {
-                functionName: "getReviewsByYear",
-                fileName: "getReviewsByYear.ts",
+                functionName: "getAllReviewsByReviewerName",
+                fileName: "getAllReviewsByReviewerName.ts",
                 table,
                 permissons: Permissons.READ
             }
@@ -88,6 +88,9 @@ export class RestApi extends Construct {
         // URL /movies/reviews
         const reviewsEndpoint = moviesEndpoint.addResource("reviews");
 
+        // URL /movies/reviews/{reviewerName}
+        const reviewsReviewersNameEndpoint = reviewsEndpoint.addResource("{reviewerName}")
+
         // URL /movies/{movieId}
         const movieEndpoint = moviesEndpoint.addResource("{movieId}");
 
@@ -96,6 +99,7 @@ export class RestApi extends Construct {
 
         // URL /movies/{movieId}/reviews/{reviewerName}
         const reviewerNameEndpoint = movieReviewsEndpoint.addResource("{reviewerName}");
+
 
         // GET /movies/reviews
         reviewsEndpoint.addMethod(
@@ -107,6 +111,12 @@ export class RestApi extends Construct {
         reviewsEndpoint.addMethod(
             "POST",
             new apig.LambdaIntegration(addReviewFn.lambdaFunction, { proxy: true })
+        );
+
+        // GET /movies/reviews/{reviewerName}
+        reviewsReviewersNameEndpoint.addMethod(
+            "GET",
+            new apig.LambdaIntegration(getAllReviewsByReviewerNameFn.lambdaFunction, { proxy: true })
         );
 
         // GET /movies/{movieId}/reviews

@@ -17,7 +17,7 @@ export const reviews: Review[] = [
     },
     {
         movieId:575264,
-        reviewerName: "Manuel São Bento",
+        reviewerName: "Manuel Sao Bento",
         reviewDate: "01/09/2023",
         rating: 8.0,
         content: "Mission: Impossible - Dead Reckoning Part One delivers precisely what it set out to do: stunningly frenetic, relentless on-location action with adrenaline-charged energy levels. A 163-minute runtime rarely feels this light, thanks to the contributions of the sublime cast – Hayley Atwell is outstanding – and the truly memorable score that elevates all the otherworldly set pieces.\r\n\r\nIt has the \"problem\" of being the first of two parts, with some unnatural, repetitive exposition scenes that get in the way of its progress, in addition to a somewhat generic, ambiguous narrative around A.I.\r\n\r\nNevertheless, it's a summer blockbuster in its purest form, as you'd expect from the icon Tom Cruise, to whom we owe our allegiance.\"\r\n\r\nRating: A-"
@@ -38,7 +38,7 @@ export const reviews: Review[] = [
     },
     {
         movieId: 385687,
-        reviewerName: "Manuel São Bento",
+        reviewerName: "Manuel Sao Bento",
         reviewDate: "23/08/2023",
         rating: 6.0,
         content: "Fast X surprisingly pulls me back into a saga I had practically given up on. Jason Momoa is, by far, the MVP of the whole film, transforming an easily forgettable villain into a truly hilarious explosion of charm and *camp*. The cast still holds that enviable chemistry, even though Daniela Melchior and Portugal deserved more screen time.\r\n\r\nConsidering the previous entries, the energetic action actually turns out to be quite tolerable when it comes to the expected illogical insanity of the franchise - which will please viewers with less patience for absurdity. Despite an overuse of false backdrops and extremely agitated editing, the entertainment levels are well within the acceptable spectrum.\r\n\r\nIt's clearly the first film in a final trilogy. Interpret this last sentence as you wish.\"\r\n\r\nRating: B-"
