@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { LambdaFn } from "./lambda";
 import { Permissons } from "../../shared/utils";
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 type RestAPIProps = {
     table: Table
@@ -82,6 +83,29 @@ export class RestApi extends Construct {
             }
         );
 
+        const getReviewTranslationFn = new LambdaFn(
+            this,
+            "getReviewTranslationFn",
+            {
+                functionName: "getReviewTranslation",
+                fileName: "getReviewTranslation.ts",
+                table,
+                permissons: Permissons.READ
+            }
+        );
+
+        const translatePolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['translate:*'],
+            resources: ['*']
+        });
+
+        getReviewTranslationFn.lambdaFunction.role?.attachInlinePolicy(
+            new iam.Policy(this, 'translate-policy', {
+                statements: [translatePolicy]
+            })
+        );
+
         // URL /movies
         const moviesEndpoint = api.root.addResource("movies");
 
@@ -99,6 +123,9 @@ export class RestApi extends Construct {
 
         // URL /movies/{movieId}/reviews/{reviewerName}
         const reviewerNameEndpoint = movieReviewsEndpoint.addResource("{reviewerName}");
+
+        // URL /movies/{movieId}/reviews/{reviewerName}/tanslation
+        const tanslationEndpoint = reviewerNameEndpoint.addResource("tanslation")
 
 
         // GET /movies/reviews
@@ -135,6 +162,12 @@ export class RestApi extends Construct {
         reviewerNameEndpoint.addMethod(
             "PUT",
             new apig.LambdaIntegration(updateReviewContentFn.lambdaFunction, { proxy: true })
+        );
+
+        // GET /movies/{movieId}/reviews/{reviewerName}/translation
+        tanslationEndpoint.addMethod(
+            "GET",
+            new apig.LambdaIntegration(getReviewTranslationFn.lambdaFunction, { proxy: true })
         );
     }
 }

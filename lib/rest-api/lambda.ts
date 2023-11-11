@@ -4,6 +4,7 @@ import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Permissons } from "../../shared/utils";
+import { PolicyStatement, PolicyStatementProps } from "aws-cdk-lib/aws-iam";
 
 type LambdaProps = {
   functionName: string,
@@ -33,6 +34,7 @@ export class LambdaFn extends Construct {
           TABLE_NAME: table.tableName,
           REGION: 'eu-west-1',
         },
+        
       }
     );
 
