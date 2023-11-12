@@ -24,7 +24,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
         }
 
         const minRating = (queryParams?.minRating) ? parseInt(queryParams?.minRating) : undefined;
-        const year = queryParams?.year;
 
         let command: ScanCommandInput = {
             TableName: process.env.TABLE_NAME,
@@ -39,15 +38,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
                     ":r": minRating
                 }
             }
-        } else if (year) {
-            command = {
-                ...command,
-                FilterExpression: "movieId = :m and contains(reviewDate, :y)",
-                ExpressionAttributeValues: {
-                    ":m": movieId,
-                    ":y": year
-                }
-            }
+
         } else {
             command = {
                 ...command,

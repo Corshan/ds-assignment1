@@ -4,6 +4,7 @@ import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as node from "aws-cdk-lib/aws-lambda-nodejs";
 import { LambdaFn } from "./lambda";
+import { RequestAuthorizer } from "./requestAuthorizer";
 
 type AuthApiProps = {
     userPoolId: string;
@@ -11,6 +12,8 @@ type AuthApiProps = {
 };
 
 export class AuthApi extends Construct {
+    public requestAuthorizer: apig.RequestAuthorizer;
+
     constructor(scope: Construct, id: string, props: AuthApiProps) {
         super(scope, id)
 
@@ -101,5 +104,10 @@ export class AuthApi extends Construct {
             "GET",
             new apig.LambdaIntegration(signOutFn.lambdaFunction)
         );
+
+        this.requestAuthorizer = new RequestAuthorizer(this, "Request Authorizer", {
+            userPoolClientId,
+            userPoolId
+        }).requestAuthorizer;
     }
 }

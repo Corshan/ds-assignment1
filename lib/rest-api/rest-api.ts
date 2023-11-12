@@ -7,13 +7,14 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 
 type RestAPIProps = {
     table: Table
+    requestAuthorizer: apig.RequestAuthorizer
 }
 
 export class RestApi extends Construct {
     constructor(scope: Construct, id: string, props: RestAPIProps) {
         super(scope, id);
 
-        const { table } = props;
+        const { table, requestAuthorizer } = props;
         // REST API 
         const api = new apig.RestApi(this, "RestAPI", {
             description: "Rest API",
@@ -137,7 +138,11 @@ export class RestApi extends Construct {
         // POST /movies/reviews
         reviewsEndpoint.addMethod(
             "POST",
-            new apig.LambdaIntegration(addReviewFn.lambdaFunction, { proxy: true })
+            new apig.LambdaIntegration(addReviewFn.lambdaFunction, { proxy: true }),
+            {
+                authorizer: requestAuthorizer,
+                authorizationType: apig.AuthorizationType.CUSTOM
+            }
         );
 
         // GET /movies/reviews/{reviewerName}
@@ -161,7 +166,11 @@ export class RestApi extends Construct {
         // PUT /movies/{movieId}/reviews/{reviewerName}
         reviewerNameEndpoint.addMethod(
             "PUT",
-            new apig.LambdaIntegration(updateReviewContentFn.lambdaFunction, { proxy: true })
+            new apig.LambdaIntegration(updateReviewContentFn.lambdaFunction, { proxy: true }),
+            {
+                authorizer: requestAuthorizer,
+                authorizationType: apig.AuthorizationType.CUSTOM
+            }
         );
 
         // GET /movies/{movieId}/reviews/{reviewerName}/translation

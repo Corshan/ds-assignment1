@@ -37,13 +37,14 @@ export class AppStack extends cdk.Stack {
 
     new SeedData(this, "SeedData", { reviewsTable, reviews });
 
-    const restApi = new RestApi(this, "RestAPI", {
-      table: reviewsTable
-    });
-
     const authApi = new AuthApi(this, "AuthAPI", {
       userPoolClientId: appClient.userPoolClientId,
       userPoolId: userPool.userPoolId
-    })
+    });
+
+    const restApi = new RestApi(this, "RestAPI", {
+      table: reviewsTable,
+      requestAuthorizer: authApi.requestAuthorizer
+    }); 
   }
 }
