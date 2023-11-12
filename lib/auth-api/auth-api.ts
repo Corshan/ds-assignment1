@@ -48,16 +48,31 @@ export class AuthApi extends Construct {
             }
         );
 
+        const confirmSignUpFn = new LambdaFn(
+            this,
+            "confirmSignUpFn",
+            {
+                functionName: "confirmSignUp",
+                fileName: "confirmSignUp.ts",
+                userPoolClientId,
+                userPoolId
+            }
+        );
+
         // URL /auth/signup
         const signUpEndpoint = authEndpoint.addResource("signup");
-
         // POST /auth/signup
         signUpEndpoint.addMethod(
             "POST",
             new apig.LambdaIntegration(signUpFn.lambdaFunction)
         );
 
-
-
+        // URL /auth/confirm-signup
+        const confirmSignUpEndpoint = authEndpoint.addResource("confirm-signup");
+        // POST /auth/confirm-signup
+        confirmSignUpEndpoint.addMethod(
+            "POST",
+            new apig.LambdaIntegration(confirmSignUpFn.lambdaFunction)
+        );
     }
 }
