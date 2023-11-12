@@ -2,8 +2,6 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as cdk from "aws-cdk-lib";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
-import { Table } from "aws-cdk-lib/aws-dynamodb";
-import { Permissons } from "../../shared/utils";
 
 type LambdaProps = {
     functionName: string,
@@ -35,7 +33,6 @@ export class LambdaFn extends Construct {
                     CLIENT_ID: userPoolClientId,
                     REGION: 'eu-west-1',
                 },
-
             }
         );
     }

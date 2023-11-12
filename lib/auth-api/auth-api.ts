@@ -59,6 +59,17 @@ export class AuthApi extends Construct {
             }
         );
 
+        const signOutFn = new LambdaFn(
+            this,
+            "signOutFn",
+            {
+                functionName: "signOut",
+                fileName: "signOut.ts",
+                userPoolClientId,
+                userPoolId
+            }
+        );
+
         // URL /auth/signup
         const signUpEndpoint = authEndpoint.addResource("signup");
         // POST /auth/signup
@@ -81,6 +92,14 @@ export class AuthApi extends Construct {
         signInEndpoint.addMethod(
             "POST",
             new apig.LambdaIntegration(signInFn.lambdaFunction)
+        );
+
+        // URL /auth/signout
+        const signOutEndpoint = authEndpoint.addResource("signout");
+        // POST /auth/signout
+        signOutEndpoint.addMethod(
+            "GET",
+            new apig.LambdaIntegration(signOutFn.lambdaFunction)
         );
     }
 }
