@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { RestApiStack } from '../lib/rest-api-stack';
+import { AppStack } from '../lib/app-stack';
 
 const app = new cdk.App();
-new RestApiStack(app, 'DsAssignment1Stack', {
+new AppStack(app, 'Assignment-App-Stack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

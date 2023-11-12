@@ -1,8 +1,8 @@
 import { ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
-import { createDDbDocClient } from "../shared/utils";
+import { createDDbDocClient } from "../../shared/utils";
 import * as AWS from 'aws-sdk';
-import { Review } from "../shared/types";
+import { Review } from "../../shared/types";
 
 const ddbDocClient = createDDbDocClient();
 

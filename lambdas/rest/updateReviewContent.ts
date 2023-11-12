@@ -1,8 +1,8 @@
 import { UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import Ajv from "ajv";
-import schema from "../shared/types.schema.json";
-import { createDDbDocClient } from "../shared/utils";
+import schema from "../../shared/types.schema.json";
+import { createDDbDocClient } from "../../shared/utils";
 
 const ajv = new Ajv();
 const isValidBodyParams = ajv.compile(schema.definitions["UpdateReview"] || {});

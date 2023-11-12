@@ -1,8 +1,8 @@
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
-import { createDDbDocClient } from "../shared/utils";
+import { createDDbDocClient } from "../../shared/utils";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import Ajv from "ajv";
-import schema from "../shared/types.schema.json";
+import schema from "../../shared/types.schema.json";
 
 const ajv = new Ajv();
 const isValidBodyParams = ajv.compile(schema.definitions["Review"] || {})

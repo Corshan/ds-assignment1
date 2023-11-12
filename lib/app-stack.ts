@@ -1,13 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
-import * as lambda from "aws-cdk-lib/aws-lambda";
+import { UserPool } from "aws-cdk-lib/aws-cognito";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from 'constructs';
 import { SeedData } from './rest-api/seed-data';
 import { reviews } from '../seed/reviews';
 import { RestApi } from './rest-api/rest-api';
+import { AuthApi } from './auth-api/auth-api';
 
 
-export class RestApiStack extends cdk.Stack {
+export class AppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -21,14 +22,28 @@ export class RestApiStack extends cdk.Stack {
 
     reviewsTable.addLocalSecondaryIndex({
       indexName: "date",
-      sortKey: {name: "reviewDate", type: dynamodb.AttributeType.STRING}
+      sortKey: { name: "reviewDate", type: dynamodb.AttributeType.STRING }
+    });
+
+    const userPool = new UserPool(this, "UserPool", {
+      signInAliases: { username: true, email: true },
+      selfSignUpEnabled: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
+
+    const appClient = userPool.addClient("AppClient", {
+      authFlows: { userPassword: true }
     });
 
     new SeedData(this, "SeedData", { reviewsTable, reviews });
 
-   const restApi = new RestApi(this, "RestAPI", {
-    table: reviewsTable
-   });
+    const restApi = new RestApi(this, "RestAPI", {
+      table: reviewsTable
+    });
 
+    const authApi = new AuthApi(this, "AuthAPI", {
+      userPoolClientId: appClient.userPoolClientId,
+      userPoolId: userPool.userPoolId
+    })
   }
 }

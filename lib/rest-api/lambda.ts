@@ -4,7 +4,6 @@ import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Permissons } from "../../shared/utils";
-import { PolicyStatement, PolicyStatementProps } from "aws-cdk-lib/aws-iam";
 
 type LambdaProps = {
   functionName: string,
@@ -27,7 +26,7 @@ export class LambdaFn extends Construct {
       {
         architecture: lambda.Architecture.ARM_64,
         runtime: lambda.Runtime.NODEJS_16_X,
-        entry: `${__dirname}/../../lambdas/${fileName}`,
+        entry: `${__dirname}/../../lambdas/rest/${fileName}`,
         timeout: cdk.Duration.seconds(10),
         memorySize: 128,
         environment: {
