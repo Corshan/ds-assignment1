@@ -74,5 +74,13 @@ export class AuthApi extends Construct {
             "POST",
             new apig.LambdaIntegration(confirmSignUpFn.lambdaFunction)
         );
+
+        // URL /auth/signin
+        const signInEndpoint = authEndpoint.addResource("signin");
+        // POST /auth/signin
+        signInEndpoint.addMethod(
+            "POST",
+            new apig.LambdaIntegration(signInFn.lambdaFunction)
+        );
     }
 }
